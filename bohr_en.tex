@@ -1,5 +1,158 @@
-\documentclass{cnpkgdoc}
-\docsetup{pkg=bohr}
+% arara: pdflatex: { shell: on }
+% arara: pdflatex
+\documentclass[toc=index]{cnpkgdoc}
+\docsetup{
+  pkg      = bohr ,
+  cmd      = \BOHR ,
+  code-box = {
+    skipbelow        = .5\baselineskip plus .5ex minus .5ex ,
+    skipabove        = .5\baselineskip plus .5ex minus .5ex ,
+    roundcorner      = 3pt ,
+    innerleftmargin  = 1.5em ,
+    innerrightmargin = 1.5em
+  } ,
+  gobble   = 1
+}
+\addcmds{bohr,ch,setbohr}
+\usepackage{chemmacros}
+
+\usepackage[osf]{libertine}
+\usepackage[supstfm=libertinesups]{superiors}
+\usepackage{fnpct}
+
+\usepackage{embrac}[2012/06/29]
+\ChangeEmph{[}[,.02em]{]}[.055em,-.08em]
+\ChangeEmph{(}[-.01em,.04em]{)}[.04em,-.05em]
+
+\renewcommand*\othersectionlevelsformat[3]{\textcolor{main}{#3\autodot}\enskip}
+\renewcommand*\partformat{\textcolor{main}{\partname~\thepart\autodot}}
+
+\usepackage{filecontents}
+\begin{filecontents}{\jobname.ist}
+ heading_prefix "{\\bfseries "
+ heading_suffix "\\hfil}\\nopagebreak\n"
+ headings_flag  1
+ delim_0 "\\dotfill "
+ delim_1 "\\dotfill "
+ delim_2 "\\dotfill "
+ delim_r "\\textendash"
+ suffix_2p "\\nohyperpage{\\,f.}"
+ suffix_3p "\\nohyperpage{\\,ff.}"
+\end{filecontents}
+
+\usepackage{imakeidx}
+% \indexsetup{noclearpage}
+\makeindex[columns=2,intoc,options={-sl \jobname.ist}]
+
+\TitlePicture{%
+  \parbox{.7\linewidth}{This package provides means for the creation of simple
+  Bohr models of atoms up to the atomic number 54. It is inspired by a question
+  on \url{http://tex.stackexchange.com/}: \href{http://tex.stackexchange.com/%
+  questions/73410/draw-bohr-atomic-model-with-electron-shells-in-tex}%
+  {Draw Bohr atomic model with electron shells in TeX?}}%
+}
+
+\newcommand*\Default[1]{%
+  \hfill\llap
+    {%
+      \ifblank{#1}%
+        {(initially~empty)}%
+        {Default:~\code{#1}}%
+    }%
+  \newline
+}
+\newcommand*\required{\hfill\llap{required}\newline}
+\newcommand*\optional{\hfill\llap{optional}\newline}
+
 \begin{document}
 
+\section{Licence and Requirements}
+\BOHR is placed under the terms of the LaTeX Project Public License,
+version 1.3 or later (\url{http://www.latex-project.org/lppl.txt}).
+It has the status ``maintained.''
+
+\BOHR loads and needs the packages \paket{tikz} and \paket{etoolbox}.
+
+\section{Usage}\secidx{Usage}
+\BOHR is used like any other \LaTeXe\ package:
+\begin{beispiel}[code only]
+ \usepackage{bohr}
+\end{beispiel}
+It has no options so that's it.
+
+\BOHR provides a single command, \cmd{bohr}, which creates the models:
+\begin{beschreibung}
+ \Befehl{bohr}\oa{<num of shells>}\ma{<number of electrons>}\ma{<atom name>}
+\end{beschreibung}
+This is described best by an example:
+\begin{beispiel}
+ \bohr{3}{Li}
+\end{beispiel}
+There is not much more to it. Another example using the optional argument:
+\begin{beispiel}
+ \bohr[2]{2}{$\mathrm{Li^+}$}
+\end{beispiel}
+\secidx*{Usage}
+
+\section{Customization}\secidx{Customization}
+\BOHR provides a few options to customize the appearance:
+\begin{beschreibung}
+ \Befehl{setbohr}\newline
+   Options are set in a key/value syntax using this command.
+ \Option{atom-style}{<code>}\Default{}
+   This code will be placed immediatly before the third argument of \cmd{bohr}.
+   The last macro in it may need one argument.
+ \Option{name-options-set}{<tikz>}\Default{}
+   This value is passed to the options of the \cmd*{node} the third argument of
+   \cmd{bohr} is placed in.
+ \Option{name-options-add}{<tikz>}\Default{}
+   This value will be added to options set with \key{name-options-set}.
+ \Option{nucleus-option-set}{<tikz>}\Default{draw=black!80,fill=black!10,opacity=.25}
+   This value is passed to the options of the \cmd*{draw} command that draws the
+   circle around the name-node.
+ \Option{nucleus-options-add}{<tikz>}\Default{}
+   This value will be added to options set with \key{nucleus-options-set}.
+ \Option{nucleus-radius}{<dim>}\Default{1em}
+   The radius of the circle around the name-node.
+ \Option{electron-options-set}{<tikz>}\Default{blue!50!black!50}
+   This value is passed to the options of the \cmd*{fill} command that draws the
+   electrons.
+ \Option{electron-options-add}{<tikz>}\Default{}
+   This value will be added to options set with \key{electron-options-set}.
+ \Option{electron-radius}{<dim>}\Default{1.5pt}
+   The radius of the circles that represent the electrons.
+ \Option{shell-options-set}{<tikz>}\Default{draw=blue!75,thin}
+   This value is passed to the options of the \cmd*{draw} command that draws the
+   circles that represent the shells.
+ \Option{shell-options-add}{<tikz>}\Default{}
+   This value will be added to options set with \key{shell-options-set}.
+ \Option{shell-dist}{<dim>}\Default{1em}
+   The distance between the nucleus and the first shell and between subsequent
+   shells.
+\end{beschreibung}
+
+\begin{beispiel}
+ \setbohr{name-options-set={font=\footnotesize\sffamily}}
+ \bohr{2}{He} \bohr{7}{N}
+\end{beispiel}
+
+\begin{beispiel}
+ % uses package `chemmacros'
+ \setbohr{atom-style={\footnotesize\sffamily\ch}}
+ \bohr{0}{H+} \bohr{10}{F-}
+\end{beispiel}
+
+\begin{beispiel}
+ \setbohr{
+   shell-options-add = dashed,
+   shell-dist        = .5em
+ }
+ \bohr{6}{C} \bohr{19}{K}
+\end{beispiel}
+\secidx*{Customization}
+
+\section{Implementation}
+\implementation
+
+\printindex
 \end{document}
