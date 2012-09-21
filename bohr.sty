@@ -1,0 +1,129 @@
+\ProvidesPackage{bohr}[2012/09/21 v0.1a simple atom representation according to the Bohr model]
+\RequirePackage{tikz,etoolbox}
+
+\newrobustcmd*\bohr[3][]{\@bohr{#1}{#2}{#3}}
+
+\def\@bohr#1#2#3{%
+  \ifblank{#1}
+    {\@bohr@get@shell@num{#2}}
+    {
+      \@bohr@get@shell@num{#2}%
+      \ifnum#1<\@bohr@shell@num
+        \@bohr@warning{The shell number you provided (#1) is too small for the
+          electron number you provided (#2)! I use \@bohr@shell@num\space shells.}%
+      \else
+        \def\@bohr@shell@num{#1}%
+      \fi
+    }%
+  \tikzpicture[baseline=(nucleus.base)]
+    \expandafter\node\expandafter[\@bohr@name@options]
+      (nucleus) at (0,0) {#3} ;
+    \expandafter\draw\expandafter[\@bohr@nucleus@options]
+      (nucleus) circle (\@bohr@nucleus@radius) ;
+    \foreach\@bohr@current@shell@num in {1,...,\@bohr@shell@num}
+      {
+        \expandafter\draw\expandafter[\@bohr@shell@options]
+          (nucleus) circle (\@bohr@nucleus@radius+\@bohr@current@shell@num*\@bohr@shell@dist) ;
+      }
+    \@bohr@draw@electrons{#2}
+  \endtikzpicture
+}
+
+\def\@bohr@get@shell@num#1{%
+  \ifnum#1<3\relax
+    \def\@bohr@shell@num{1}%
+  \else
+    \ifnum#1<11\relax
+      \def\@bohr@shell@num{2}%
+    \else
+      \ifnum#1<19\relax
+        \def\@bohr@shell@num{3}%
+      \else
+        \ifnum#1<37\relax
+          \def\@bohr@shell@num{4}%
+        \else
+          \ifnum#1<55\relax
+            \def\@bohr@shell@num{5}%
+          \else
+            \@bohr@error{I don't know how to draw #1 electrons!}%
+          \fi
+        \fi
+      \fi
+    \fi
+  \fi
+}
+
+\def\@bohr@distribute@electrons#1#2#3#4{%
+  \foreach\@bohr@electron@number in {#1,...,#2}
+    {
+      \expandafter\fill\expandafter[\@bohr@electron@options] (nucleus)
+        ++(#3*\@bohr@electron@number:\@bohr@nucleus@radius+#4*\@bohr@shell@dist)
+        circle (\@bohr@electron@radius) ;
+    }
+}
+
+\def\@bohr@draw@electrons#1{%
+  \ifnum#1<3\relax
+    \@bohr@distribute@electrons{1}{#1}{180}{1}%
+  \else
+    \ifnum#1<11\relax
+      \@bohr@distribute@electrons{1}{2}{180}{1}%
+      \@bohr@distribute@electrons{3}{#1}{45}{2}%
+    \else
+      \ifnum#1<19\relax
+        \@bohr@distribute@electrons{1}{2}{180}{1}%
+        \@bohr@distribute@electrons{3}{10}{45}{2}%
+        \@bohr@distribute@electrons{11}{#1}{45}{3}%
+      \else
+        \ifnum#1<37\relax
+          \@bohr@distribute@electrons{1}{2}{180}{1}%
+          \@bohr@distribute@electrons{3}{10}{45}{2}%
+          \@bohr@distribute@electrons{11}{18}{45}{3}%
+          \@bohr@distribute@electrons{19}{#1}{20}{4}%
+        \else
+          \ifnum#1<55\relax
+            \@bohr@distribute@electrons{1}{2}{180}{1}%
+            \@bohr@distribute@electrons{3}{10}{45}{2}%
+            \@bohr@distribute@electrons{11}{18}{45}{3}%
+            \@bohr@distribute@electrons{19}{36}{20}{4}%
+            \@bohr@distribute@electrons{37}{#1}{20}{5}%
+          \fi
+        \fi
+      \fi
+    \fi
+  \fi
+}
+
+% definable parameters:
+\def\@bohr@name@options{}
+\def\@bohr@nucleus@radius{1em}
+\def\@bohr@electron@options{blue!50!black!50}
+\def\@bohr@electron@radius{1.5pt}
+\def\@bohr@shell@dist{1em}
+\def\@bohr@nucleus@options{draw=black!80,fill=black!10,opacity=.25}
+\def\@bohr@shell@options{draw=blue!75,thin}
+
+\pgfkeys{
+  bohr/.cd,
+    name-options-set/.code     = \def\@bohr@name@options{#1} ,
+    name-options-add/.code     =
+      \expandafter\def\expandafter\@bohr@name@options\expandafter{\@bohr@name@options,#1} ,
+    nucleus-radius/.code       = \def\@bohr@nucleus@radius{#1} ,
+    nucleus-options-set/.code  = \def\@bohr@nucleus@options{#1} ,
+    nucleus-options-add/.code  =
+      \expandafter\def\expandafter\@bohr@nucleus@options\expandafter{\@bohr@nucleus@options,#1} ,
+    electron-radius/.code      = \def\@bohr@electron@radius{#1} ,
+    electron-options-set/.code = \def\@bohr@electron@options{#1} ,
+    electron-options-add/.code =
+      \expandafter\def\expandafter\@bohr@electron@options\expandafter{\@bohr@electron@options,#1} ,
+    shell-dist/.code           = \def\@bohr@shell@dist{#1} ,
+    shell-options-set/.code    = \def\@bohr@shell@options{#1} ,
+    shell-options-add/.code    =
+      \expandafter\def\expandafter\@bohr@shell@options\expandafter{\@bohr@shell@options,#1}
+}
+
+\newrobustcmd\setbohr[1]{\pgfqkeys{/bohr}{#1}}
+
+\def\@bohr@error#1{\PackageError{bohr}{#1}{}}
+\def\@bohr@warning#1{\PackageWarning{bohr}{#1}{}}
+\endinput
