@@ -73,7 +73,8 @@
 version 1.3 or later (\url{http://www.latex-project.org/lppl.txt}).
 It has the status ``maintained.''
 
-\BOHR loads and needs the packages \paket{tikz}, \paket{pgfopts} and \paket{etoolbox}.
+\BOHR loads and needs the packages \paket[pgf]{tikz}, \paket{pgfopts} and
+\paket{etoolbox}.
 \secidx*{License}
 
 \section{Options}\secidx{Options}
@@ -105,7 +106,7 @@ There is not much more to it. Another example using the optional argument:
 \section{Customization}\secidx{Customization}
 \BOHR provides a handful of options to customize the appearance:
 \begin{beschreibung}
- \Befehl{setbohr}\newline
+ \Befehl{setbohr}{<options>}\newline
    Options are set in a key/value syntax using this command.
  \Option{insert-symbol}{\default{true}|false}\Default{false}
    If set to \code{true} \BOHR will insert the atomic symbol suiting to the given
@@ -185,7 +186,7 @@ element name to a given atomic number and vice versa.
    \atomicnumber{rhenium}.
  \Befehl{Z}\newline
    If this command isn't defined by some other package it is available as an
-   alias of \cmd{atomicnumber}. \cmd{Z}{Hg}: \Z{Hg}.
+   alias of \cmd{atomicnumber}.
 \end{beschreibung}
 
 \begin{beispiel}
