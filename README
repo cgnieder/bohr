@@ -24,7 +24,10 @@ This work has the LPPL maintenance status `maintained'.
 The Current Maintainer of this work is Clemens Niederberger.
 --------------------------------------------------------------------------
 The bohr package consists of the files
- - bohr.sty, bohr_en.tex, bohr_en.pdf and README
+ - bohr.sty
+ - bohr_en.tex, bohr_en.pdf
+ - bohr_elements_english.def, bohr_elements_german.def
+ - README
 --------------------------------------------------------------------------
 If you have any ideas, questions, suggestions or bugs to report, please
 feel free to contact me.
