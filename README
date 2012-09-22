@@ -1,15 +1,15 @@
 --------------------------------------------------------------------------
-the BOHR package v 0.1a
+the BOHR package v0.2
 
   simple atom representation according to the Bohr model
 
-2012/09/21
+2012/09/22
 --------------------------------------------------------------------------
 Clemens Niederberger
 Web:    https://bitbucket.org/cgnieder/bohr/
 E-Mail: contact@mychemistry.eu
 --------------------------------------------------------------------------
-Copyright 2011-2012 Clemens Niederberger
+Copyright 2012 Clemens Niederberger
 
 This work may be distributed and/or modified under the
 conditions of the LaTeX Project Public License, either version 1.3
