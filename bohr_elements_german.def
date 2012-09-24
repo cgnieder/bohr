@@ -39,7 +39,7 @@
 \DeclareAtomName{39}{Yttrium}
 \DeclareAtomName{40}{Zirconium}
 \DeclareAtomName{41}{Niobium}
-\DeclareAtomName{42}{Molybd\"{a}n}
+\DeclareAtomName[Molybdaen]{42}{Molybd\"{a}n}
 \DeclareAtomName{43}{Technetium}
 \DeclareAtomName{44}{Ruthenium}
 \DeclareAtomName{45}{Rhodium}
@@ -52,7 +52,7 @@
 \DeclareAtomName{52}{Tellur}
 \DeclareAtomName{53}{Iod}
 \DeclareAtomName{54}{Xenon}
-\DeclareAtomName{55}{C\"{a}sium}
+\DeclareAtomName[Caesium]{55}{C\"{a}sium}
 \DeclareAtomName{56}{Barium}
 \DeclareAtomName{57}{Lanthan}
 \DeclareAtomName{58}{Cer}
