@@ -1,4 +1,4 @@
-% arara: xelatex: { shell: on }
+% arara: xelatex
 % arara: xelatex
 % --------------------------------------------------------------------------
 % the BOHR package
@@ -58,8 +58,7 @@
 \usepackage{chemmacros}
 
 \usepackage{fontspec}
-\defaultfontfeatures{Numbers={OldStyle,Proportional}}
-\usepackage[supstfm=libertinesups]{superiors}
+\usepackage{superiors}
 \usepackage{fnpct}
 
 \usepackage{embrac}[2012/06/29]
@@ -105,8 +104,6 @@
     }%
   \newline
 }
-\newcommand*\required{\hfill\llap{required}\newline}
-\newcommand*\optional{\hfill\llap{optional}\newline}
 
 \begin{document}
 
