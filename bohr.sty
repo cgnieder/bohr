@@ -31,8 +31,8 @@
 % If you have any ideas, questions, suggestions or bugs to report, please
 % feel free to contact me.
 % --------------------------------------------------------------------------
-\def\@bohr@date{2012/09/26}
-\def\@bohr@version{v0.2b}
+\def\@bohr@date{2012/12/30}
+\def\@bohr@version{v0.2c}
 \def\@bohr@description{simple atom representation according to the Bohr model}
 
 \ProvidesPackage{bohr}[\@bohr@date\space \@bohr@version\space \@bohr@description]
@@ -88,7 +88,13 @@
         \@bohr@error{The electron number cannot be negative!}
           {The electron number cannot be negative!}%
       \else
-        \def\@bohr@electron@current@number{#2}%
+        \ifnum#2>112\relax
+          \@bohr@warning{I only know atoms up to 112 (Copernicium). You
+            gave me #1 so I am using 112 instead.}
+          \def\@bohr@electron@current@number{112}%
+        \else
+          \def\@bohr@electron@current@number{#2}%
+        \fi
       \fi
     }%
   \ifblank{#1}
@@ -142,13 +148,7 @@
             \ifnum#1<87\relax
               \def\@bohr@shell@num{6}%
             \else
-              \ifnum#1<110\relax
-                \def\@bohr@shell@num{7}%
-              \else
-                \def\@bohr@shell@num{112}%
-                \@bohr@warning{I only know atoms up to 112 (Copernicium). You
-                  gave me #1 so I am using 112 instead.}
-              \fi
+              \def\@bohr@shell@num{7}%
             \fi
           \fi
         \fi
@@ -203,14 +203,18 @@
                 \@bohr@distribute@electrons{1}{18}{20}{5}%
                 \@bohr@distribute@electrons{1}{#1-54}{11.25}{6}%
               \else
-                \ifnum#1<113\relax
                   \@bohr@distribute@electrons{1}{2}{180}{1}%
                   \@bohr@distribute@electrons{1}{8}{45}{2}%
                   \@bohr@distribute@electrons{1}{8}{45}{3}%
                   \@bohr@distribute@electrons{1}{18}{20}{4}%
                   \@bohr@distribute@electrons{1}{18}{20}{5}%
                   \@bohr@distribute@electrons{1}{32}{11.25}{6}%
+                \ifnum#1<113\relax
                   \@bohr@distribute@electrons{1}{#1-86}{11.25}{7}%
+                \else
+                  \@bohr@distribute@electrons{1}{26}{11.25}{7}%
+                  \@bohr@warning{I only know atoms up to 112 (Copernicium). You
+                    gave me #1 so I am using 112 instead.}
                 \fi
               \fi
             \fi
@@ -461,3 +465,4 @@
                  - added the commands \elementname and \elementsymbol with
                    language support German and English
                  - improved error checking
+2012/12/30 v0.2c - bug fixes in error checking
