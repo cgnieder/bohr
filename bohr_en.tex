@@ -1,5 +1,5 @@
-% arara: xelatex
-% arara: xelatex
+% arara: pdflatex
+% arara: pdflatex
 % --------------------------------------------------------------------------
 % the BOHR package
 % 
@@ -34,214 +34,231 @@
 % feel free to contact me.
 % --------------------------------------------------------------------------
 %
-% if you want to compile this documentation you'll need the document class
-% `cnpkgdoc' which you can get here:
-%    https://bitbucket.org/cgnieder/cnpkgdoc/
-% the class is licensed LPPL 1.3 or later
+% if you want to compile this documentation you'll need my `cnltx` bundle
+% which you can get here:
+%    https://github.com/cgnieder/cnltx/
 %
-% use `xelatex --shell-scape' for compilation
-%
-\documentclass[toc=index]{cnpkgdoc}
-\docsetup{
-  pkg      = bohr ,
-  cmd      = \BOHR ,
-  code-box = {
-    skipbelow        = .5\baselineskip plus .5ex minus .5ex ,
-    skipabove        = .5\baselineskip plus .5ex minus .5ex ,
-    roundcorner      = 3pt ,
-    innerleftmargin  = 1.5em ,
-    innerrightmargin = 1.5em
+\documentclass[load-preamble+]{cnltx-doc}
+\usepackage[utf8]{inputenc}
+\usepackage{bohr}
+
+\setcnltx{
+  package = bohr ,
+  authors = Clemens Niederberger ,
+  email   = contact@mychemistry.eu ,
+  url     = https://bitbucket.org/cgnieder/bohr/ ,
+  add-cmds = {
+    atomicnumber,
+    bohr,
+    DeclareAtomName,
+    DeclareAtomSymbol,
+    DeclareElectronDistribution,
+    elementname,
+    elementsymbol,
+    setbohr,
+    Z
   } ,
-  gobble   = 1
+  add-silent-cmds = ch ,
+  abstract = {%
+    This package provides means for the creation of simple
+    Bohr models of atoms up to the atomic number 112.  Additionally commands
+    are provided to convert atomic numbers to element symbols or element names
+    and vice versa.\par
+    The package is inspired by a question on
+    \url{http://tex.stackexchange.com/}:
+    \href{http://tex.stackexchange.com/questions/73410/draw-bohr-atomic-model-with-electron-shells-in-tex}%
+    {Draw Bohr atomic model with electron shells in \TeX?}%
+  } ,
+  index-setup = {
+     othercode = \footnotesize ,
+     level = \addsec ,
+     noclearpage
+  } ,
+  makeindex-setup = {
+     columns = 3 ,
+     columnsep = 1em
+  }
 }
-\addcmds{bohr,ch,elementname,elementsymbol,setbohr}
+
+% \microtypesetup{tracking=scshape}
+
+\defbibheading{bibliography}{\addsec{References}}
+
+\newpackagename\BOHR{bohr}
+
 \usepackage{chemmacros}
-
-\usepackage{fontspec}
-\usepackage{superiors}
-\usepackage{fnpct}
-
-\usepackage{embrac}[2012/06/29]
-\ChangeEmph{[}[,.02em]{]}[.055em,-.08em]
-\ChangeEmph{(}[-.01em,.04em]{)}[.04em,-.05em]
-
-\renewcommand*\othersectionlevelsformat[3]{\textcolor{main}{#3\autodot}\enskip}
-\renewcommand*\partformat{\textcolor{main}{\partname~\thepart\autodot}}
-
-\usepackage{filecontents}
-\begin{filecontents}{\jobname.ist}
- heading_prefix "{\\bfseries "
- heading_suffix "\\hfil}\\nopagebreak\n"
- headings_flag  1
- delim_0 "\\dotfill "
- delim_1 "\\dotfill "
- delim_2 "\\dotfill "
- delim_r "\\textendash"
- suffix_2p "\\nohyperpage{\\,f.}"
- suffix_3p "\\nohyperpage{\\,ff.}"
-\end{filecontents}
-
-\usepackage{imakeidx}
-% \indexsetup{noclearpage}
-\makeindex[columns=2,intoc,options={-sl \jobname.ist}]
-
-\TitlePicture{%
-  \parbox{.7\linewidth}{This package provides means for the creation of simple
-  Bohr models of atoms up to the atomic number 112. Additionally commands are
-  provided to convert atomic numbers to element symbols or element names and vice
-  versa.\par
-  The package is inspired by a question on \url{http://tex.stackexchange.com/}:
-  \href{http://tex.stackexchange.com/questions/73410/draw-bohr-atomic-model-with-electron-shells-in-tex}%
-  {Draw Bohr atomic model with electron shells in TeX?}}%
-}
-
-\newcommand*\Default[1]{%
-  \hfill\llap
-    {%
-      \ifblank{#1}%
-        {(initially~empty)}%
-        {Default:~\code{#1}}%
-    }%
-  \newline
-}
 
 \begin{document}
 
-\section{Licence and Requirements}\secidx{License}
-\BOHR is placed under the terms of the \LaTeX{} Project Public License,
-version 1.3 or later (\url{http://www.latex-project.org/lppl.txt}).
-It has the status ``maintained.''
+\section{Licence and Requirements}
+\license
 
-\BOHR loads and needs the packages \paket[pgf]{tikz}, \paket{pgfopts} and
-\paket{etoolbox}.
-\secidx*{License}
+The \BOHR\ package loads and needs the packages
+\needpackage[graphics]{pgf}~\cite{pkg:pgf} and
+\pkg{cnltx-base}\footnote{\CTANurl{cnltx}}~\cite{bnd:cnltx}.
 
-\section{Options}\secidx{Options}
-Every option described in the manual can also be used as package option. Options
-are indicated as \key{option} and are all key/value like options. Some options can
-be set without value, too. Then the \default{underlined} value is used.
-\secidx*{Options}
+\section{Options}
+Every option described in the manual can also be used as package option.
+Options are indicated as \option*{option} and are all key/value like options.
+Some options can be set without value, too.  Then the
+\code{\default{underlined}} value is used.
 
-\section{Usage}\secidx{Usage}
-\BOHR is used like any other \LaTeXe\ package:
-\begin{beispiel}[code only]
- \usepackage{bohr}
-\end{beispiel}
+\section{Usage}
+\BOHR\ is used like any other \LaTeXe\ package:
+\begin{sourcecode}
+  \usepackage{bohr}
+\end{sourcecode}
 
-The main command, \cmd{bohr}, creates the models:
-\begin{beschreibung}
- \Befehl{bohr}\oa{<num of shells>}\ma{<number of electrons>}\ma{<atom name>}
-\end{beschreibung}
+The main command, \cs{bohr}, creates the models:
+\begin{commands}
+ \command{bohr}[\oarg{num of shells}\marg{num of electrons}\marg{atom name}]
+   The main command.  The mandatory arguments take the number of electrons to
+   be printed and the atom symbol that is printed in the center.
+\end{commands}
+
 This is described best by an example:
-\begin{beispiel}
- \bohr{3}{Li}
-\end{beispiel}
-There is not much more to it. Another example using the optional argument:
-\begin{beispiel}
- \bohr[2]{2}{$\mathrm{Li^+}$}
-\end{beispiel}
-\secidx*{Usage}
+\begin{example}[side-by-side]
+  \bohr{3}{Li}
+\end{example}
+There is not much more to it.  Another example using the optional argument:
+\begin{example}[side-by-side]
+  \bohr[2]{2}{$\mathrm{Li^+}$}
+\end{example}
 
-\section{Customization}\secidx{Customization}
-\BOHR provides a handful of options to customize the appearance:
-\begin{beschreibung}
- \Befehl{setbohr}{<options>}\newline
-   Options are set in a key/value syntax using this command.
- \Option{insert-symbol}{\default{true}|false}\Default{false}
-   If set to \code{true} \BOHR will insert the atomic symbol suiting to the given
-   electron number if \emph{no} third argument is given.
- \Option{insert-number}{\default{true}|false}\Default{false}
-   If set to \code{true} \BOHR will use the appropriate number of electrons
-   for the given element symbol in the third argument if \emph{no} second argument
-   is given. This of course only works if the third argument is one of the 112
-   element symbols.
- \Option{insert-missing}{\default{true}|false}\Default{false}
-   Sets both \key{insert-symbol} and \key{insert-number}.
- \Option{atom-style}{<code>}\Default{}
-   This code will be placed immediatly before the third argument of \cmd{bohr}.
-   The last macro in it may need one argument.
- \Option{name-options-set}{<tikz>}\Default{}
-   This value is passed to the options of the \cmd*{node} the third argument of
-   \cmd{bohr} is placed in.
- \Option{name-options-add}{<tikz>}\Default{}
-   This value will be added to options set with \key{name-options-set}.
- \Option{nucleus-options-set}{<tikz>}\Default{draw=black!80,fill=black!10,opacity=.25}
-   This value is passed to the options of the \cmd*{draw} command that draws the
-   circle around the name-node.
- \Option{nucleus-options-add}{<tikz>}\Default{}
-   This value will be added to options set with \key{nucleus-options-set}.
- \Option{nucleus-radius}{<dim>}\Default{1em}
-   The radius of the circle around the name-node.
- \Option{electron-options-set}{<tikz>}\Default{blue!50!black!50}
-   This value is passed to the options of the \cmd*{fill} command that draws the
-   electrons.
- \Option{electron-options-add}{<tikz>}\Default{}
-   This value will be added to options set with \key{electron-options-set}.
- \Option{electron-radius}{<dim>}\Default{1.5pt}
-   The radius of the circles that represent the electrons.
- \Option{shell-options-set}{<tikz>}\Default{draw=blue!75,thin}
-   This value is passed to the options of the \cmd*{draw} command that draws the
-   circles that represent the shells.
- \Option{shell-options-add}{<tikz>}\Default{}
-   This value will be added to options set with \key{shell-options-set}.
- \Option{shell-dist}{<dim>}\Default{1em}
-   The distance between the nucleus and the first shell and between subsequent
-   shells.
-  \Option{german}{\default{true}|false}\Default{false}
-   If set to \code{true} the German names are defined (see section~\ref{sec:additional}
-   to understand what I mean). They are also defined if you use \paket{babel} and
-   select language \code{german} or \code{ngerman} in the preamble. The same holds
-   for \paket{polyglossia}.
-\end{beschreibung}
+\section{Customization}
+\BOHR\ provides a handful of options to customize the appearance:
+\begin{commands}
+  \command{setbohr}[\marg{options}]
+    Options are set in a key/value syntax using this command.
+\end{commands}
+\begin{options}
+  \keybool{insert-symbol}\Default{false}
+    If set to \code{true} \BOHR\ will insert the atomic symbol suiting to the
+    given electron number if \emph{no} third argument is given.
+  \keybool{insert-number}\Default{false}
+    If set to \code{true} \BOHR\ will use the appropriate number of electrons
+    for the given element symbol in the third argument if \emph{no} second
+    argument is given.  This of course only works if the third argument is one
+    of the 112 element symbols.
+  \keybool{insert-missing}\Default{false}
+    Sets both \option{insert-symbol} and \option{insert-number}.
+  \keyval{atom-style}{code}\Default
+    This code will be placed immediatly before the third argument of
+    \cs{bohr}.  The last macro in it may need one argument.
+  \keyval{name-options-set}{tikz option}\Default
+    This value is passed to the options of the \cs*{node} the third argument
+    of \cs{bohr} is placed in.
+  \keyval{name-options-add}{tikz options}\Default
+    This value will be added to options set with \option{name-options-set}.
+  \keyval{nucleus-options-set}{tikz options}{}
+  \Default{draw=black!80,fill=black!10,opacity=.25}
+    This value is passed to the options of the \cs*{draw} command that draws
+    the circle around the name-node.
+  \keyval{nucleus-options-add}{tikz options}\Default
+    This value will be added to options set with \option{nucleus-options-set}.
+  \keyval{nucleus-radius}{dimension}\Default{1em}
+    The radius of the circle around the name-node.
+  \keyval{electron-options-set}{tikz options}\Default{blue!50!black!50}
+    This value is passed to the options of the \cs*{fill} command that draws
+    the electrons.
+  \keyval{electron-options-add}{tikz options}\Default
+    This value will be added to options set with \option{electron-options-set}.
+  \keyval{electron-radius}{dimension}\Default{1.5pt}
+    The radius of the circles that represent the electrons.
+  \keyval{shell-options-set}{tikz options}\Default{draw=blue!75,thin}
+    This value is passed to the options of the \cs*{draw} command that draws
+    the circles that represent the shells.
+  \keyval{shell-options-add}{tikz options}\Default
+    This value will be added to options set with \option{shell-options-set}.
+  \keyval{shell-dist}{dimension}\Default{1em}
+    The distance between the nucleus and the first shell and between subsequent
+    shells.
+  \keyval{language}{language}\Default
+    \sinceversion{0.2d}Select the language used for the element names manually
+    rather than letting \BOHR\ select it automatically.  This option must be
+    used as package option or in the preamble in order to have an effect.
+    Currently provided languages are \code{English}, \code{French} and
+    \code{German}.  If this option is not used the document language at the
+    end of the preamble (as set by \pkg{babel} or \pkg{polyglossia}) is
+    used.
+  \keychoice{distribution-method}{periodic,quantum}\Default{quantum}
+    \sinceversion{0.3}Determines how the electrons are distributed on the
+    shells.  \code{periodic} distributes the electrons 2-8-8-18-18-32-32, \ie,
+    according to the place of the corresponding atom in the periodic table of
+    elements.  \code{quantum} distributes the electrons according the the
+    electron configuration of the corresponding atom where each shell
+    represents the main quantum number.  \ch{Pd} for example has the
+    configuration $1s^22s^22p^63s^23p^63d^{10}4s^24p^64d^{10}$ and would get
+    two electrons on the first shell, 8~electrons on the second, and
+    18~electrons each on the forth and fifth.
+\end{options}
 
-\begin{beispiel}
- \setbohr{name-options-set={font=\footnotesize\sffamily}}
- \bohr{2}{He} \bohr{7}{N}
-\end{beispiel}
+\begin{example}
+  \setbohr{name-options-set={font=\footnotesize\sffamily}}
+  \bohr{2}{He} \bohr{7}{N}
+\end{example}
 
-\begin{beispiel}
- % uses package `chemmacros'
- \setbohr{atom-style={\footnotesize\sffamily\ch}}
- \bohr{0}{H+} \bohr{10}{F-}
-\end{beispiel}
+\begin{example}
+  % uses package `chemmacros'
+  \setbohr{atom-style={\footnotesize\sffamily\ch}}
+  \bohr{0}{H+} \bohr{10}{F-}
+\end{example}
 
-\begin{beispiel}
- \setbohr{
-   shell-options-add = dashed,
-   shell-dist        = .5em,
-   insert-missing
- }
- \bohr{6}{} \bohr{}{K}
-\end{beispiel}
-\secidx*{Customization}
+\begin{example}[side-by-side]
+  \setbohr{
+    shell-options-add = dashed,
+    shell-dist        = .5em,
+    insert-missing
+  }
+  \bohr{6}{} \bohr{}{K}
+\end{example}
 
-\section{Additional Commands}\label{sec:additional}
-\BOHR provides some additional commands that return the element symbol or the
+\section{Additional Commands}\label{sec:additional-commands}
+\BOHR\ provides some additional commands that return the element symbol or the
 element name to a given atomic number and vice versa.
-\begin{beschreibung}
- \Befehl{elementsymbol}{<atomic number>|<element name>}\newline
-   Returns the element symbol for a given atomic number or element name.
-   \cmd{elementsymbol}{80}: \elementsymbol{80}; \cmd{elementsymbol}{rhenium}:
-   \elementsymbol{rhenium}.
- \Befehl{elementname}{<atomic number>|<element symbol>}\newline
-   Returns the element name for a given atomic number or element symbol.
-   \cmd{elementname}{80}: \elementname{80}; \cmd{elementname}{Rh}: \elementname{Rh}.
- \Befehl{atomicnumber}{<element name>|<element symbol>}\newline
-   Returns the atomic number for a given element name or element symbol.
-   \cmd{atomicnumber}{Hg}: \atomicnumber{Hg}; \cmd{atomicnumber}{rhenium}
-   \atomicnumber{rhenium}.
- \Befehl{Z}\newline
-   If this command isn't defined by some other package it is available as an
-   alias of \cmd{atomicnumber}.
-\end{beschreibung}
+\begin{commands}
+  \command{elementsymbol}[\code{\{\choices{\meta{atomic number},\meta{element name}}\}}]
+    Returns the element symbol for a given atomic number or element name.
+    \verbcode+\elementsymbol{80}+: \elementsymbol{80};
+    \verbcode+\elementsymbol{rhenium}+: \elementsymbol{rhenium}.
+  \command{elementname}[\code{\{\choices{\meta{atomic number}|\meta{element symbol}}\}}]
+    Returns the element name for a given atomic number or element symbol.
+    \verbcode+\elementname{80}+: \elementname{80};
+    \verbcode+\elementname{Rh}+: \elementname{Rh}.
+  \command{atomicnumber}[\code{\{\choices{\meta{element name}|\meta{element symbol}}\}}]
+    Returns the atomic number for a given element name or element symbol.
+    \verbcode+\atomicnumber{Hg}+: \atomicnumber{Hg};
+    \verbcode+\atomicnumber{rhenium}+ \atomicnumber{rhenium}.
+  \command{Z}
+    If this command isn't defined by some other package it is available as an
+    alias of \cs{atomicnumber}.
+\end{commands}
 
-\begin{beispiel}
- The elements \elementname{F}, \elementname{Cl}, \elementname{Br},
- \elementname{I} and \elementname{At} are called \emph{halogens}.
-\end{beispiel}
+\begin{example}
+  The elements \elementname{F}, \elementname{Cl}, \elementname{Br},
+  \elementname{I} and \elementname{At} are called \emph{halogens}.
+\end{example}
 
-\section{Implementation}
-\implementation
+\section{Internal Commands}\label{sec:internal-commands}
+The element properties used by \BOHR\ are defined through the following commands:
+\begin{commands}
+  \command{DeclareAtomSymbol}[\marg{atomic number}\marg{atom symbol}]
+    The package file contains 112~lines like the following:
+    \verbcode+\DeclareAtomSymbol{29}{Cu}+.  They associate atomic number with
+    the corresponding atom symbol.  This command could be used to change an
+    element's symbol.
+  \command{DeclareAtomName}[\marg{atomic number}\marg{element name}]
+    \BOHR\ comes with a few language files named
+    \code{bohr\_elements\_\meta{language}.def}.  They contain of 112~entries
+    like \verbcode+\DeclareAtomName{29}{Copper}+ which associate atomic number
+    and element name.  This command could be used to change an element's name.
+  \command{DeclareElectronDistribution}[\marg{atomic number}\marg{electron
+    distribution}]
+    The \meta{electron distribution} is a comma separated list of integers
+    which determines how the electrons are distributed on the shells when
+    \keyis{distribution-method}{quantum}.  The package file contains
+    112~entries like \verbcode+\DeclareElectronDistribution{29}{2,8,18,1}+.
+    This command could be used to change an element's electron configuration.
+\end{commands}
 
-\printindex
 \end{document}
