@@ -8,7 +8,7 @@
 % Web:    https://bitbucket.org/cgnieder/bohr/
 % E-Mail: contact@mychemistry.eu
 % --------------------------------------------------------------------------
-% Copyright 2012-2013 Clemens Niederberger
+% Copyright 2012-2014 Clemens Niederberger
 % 
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -22,18 +22,11 @@
 % 
 % The Current Maintainer of this work is Clemens Niederberger.
 % --------------------------------------------------------------------------
-% The bohr package consists of the files
-%  - bohr.sty
-%  - bohr_en.tex, bohr_en.pdf
-%  - bohr_elements_english.def, bohr_elements_german.def,
-%    bohr_elements_french.def
-%  - README
-% --------------------------------------------------------------------------
 % If you have any ideas, questions, suggestions or bugs to report, please
 % feel free to contact me.
 % --------------------------------------------------------------------------
-\newcommand*\@bohr@date{2013/11/10}
-\newcommand*\@bohr@version{v0.4}
+\newcommand*\@bohr@date{2014/11/06}
+\newcommand*\@bohr@version{v0.4b}
 \newcommand*\@bohr@description{simple atom representation according to the Bohr model}
 
 \ProvidesPackage{bohr}[\@bohr@date\space \@bohr@version\space \@bohr@description]
@@ -108,10 +101,10 @@
     shell-options-set/.code    = \def\@bohr@shell@options{#1} ,
     shell-options-add/.code    =
       \@bohr@add@options@to\@bohr@shell@options{#1} ,
-    german/.code               =
-      \@bohr@option@deprecated{german}{language=german} ,
-    ngerman/.code              =
-      \@bohr@option@deprecated{ngerman}{language=german} ,
+    german/.code               = \def\@bohr@language{german} ,
+    ngerman/.code              = \def\@bohr@language{german} ,
+    french/.code               = \def\@bohr@language{french} ,
+    frenchb/.code              = \def\@bohr@language{french} ,
     language/.code             = \def\@bohr@language{#1} ,
     distribution-method/.is choice ,
     distribution-method/periodic/.code =
@@ -597,7 +590,7 @@
 \DeclareAtomSymbol{72}{Hf}
 \DeclareAtomSymbol{73}{Ta}
 \DeclareAtomSymbol{74}{W}
-\DeclareAtomSymbol{75}{Rh}
+\DeclareAtomSymbol{75}{Re}
 \DeclareAtomSymbol{76}{Os}
 \DeclareAtomSymbol{77}{Ir}
 \DeclareAtomSymbol{78}{Pt}
@@ -759,7 +752,7 @@
 \DeclareElectronDistribution{112}{2,2+6,2+6+10,2+6+10+14,2+6+10+14,2+6+10,2}
 
 % --------------------------------------------------------------------------
-% extandable language settings
+% extendable language settings
 \RequirePackage{translations}
 \AfterEndPreamble{
   % this will load a file `bohr_elements_<lang>.def', <lang> is a
@@ -797,3 +790,5 @@
                  - new commands \elconf and \writeelconf
                  - \elementsymbol prints symbols according to option
                    `atom-style'
+2014/09/29 v0.4a - alias options for `language=german' and `language=french'
+2014/11/06 v0.4b - corrected wrong element symbol for Rhenium

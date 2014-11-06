@@ -10,7 +10,7 @@
 % Web:    https://bitbucket.org/cgnieder/bohr/
 % E-Mail: contact@mychemistry.eu
 % --------------------------------------------------------------------------
-% Copyright 2012 Clemens Niederberger
+% Copyright 2012-2014 Clemens Niederberger
 % 
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -24,20 +24,9 @@
 % 
 % The Current Maintainer of this work is Clemens Niederberger.
 % --------------------------------------------------------------------------
-% The bohr package consists of the files
-%  - bohr.sty
-%  - bohr_en.tex, bohr_en.pdf
-%  - bohr_elements_english.def, bohr_elements_german.def
-%  - README
-% --------------------------------------------------------------------------
 % If you have any ideas, questions, suggestions or bugs to report, please
 % feel free to contact me.
 % --------------------------------------------------------------------------
-%
-% if you want to compile this documentation you'll need my `cnltx` bundle
-% which you can get here:
-%    https://github.com/cgnieder/cnltx/
-%
 \documentclass[load-preamble+]{cnltx-doc}
 \usepackage[utf8]{inputenc}
 \usepackage{bohr}
@@ -189,7 +178,7 @@ There is not much more to it.  Another example using the optional argument:
     \sinceversion{0.3}Determines how the electrons are distributed on the
     shells.  \code{periodic} distributes the electrons 2-8-8-18-18-32-32, \ie,
     according to the place of the corresponding atom in the periodic table of
-    elements.  \code{quantum} distributes the electrons according the the
+    elements.  \code{quantum} distributes the electrons according to the
     electron configuration of the corresponding atom where each shell
     represents the main quantum number.  \ch{Pd} for example has the
     configuration $1s^22s^22p^63s^23p^63d^{10}4s^24p^64d^{10}$ and would get
@@ -269,8 +258,8 @@ element name to a given atomic number and vice versa.
     comma-separated list of the number of electrons placed on each shell from
     inner to outer shell.  For example
     \verbcode+\setelectrondistribution{3}{2,0,1}+ would be an excited
-    Lithium.  The distribution thus declared is only used for drawing when
-    \keyis{distribution-method}{quantum} but is also used by \cs{elconf}.  The
+    Lithium.  The distribution thus declared is used for drawing with
+    \keyis{distribution-method}{quantum} and is also used by \cs{elconf}.  The
     number of electrons with the same principal quantum number but a different
     angular quantum number are separated with a \code{+} ordered by the
     angular quantum number, \ie, first $s$, then $p$, then $d$, and then $f$.
