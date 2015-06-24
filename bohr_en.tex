@@ -10,7 +10,7 @@
 % Web:    https://bitbucket.org/cgnieder/bohr/
 % E-Mail: contact@mychemistry.eu
 % --------------------------------------------------------------------------
-% Copyright 2012-2014 Clemens Niederberger
+% Copyright 2012-2015 Clemens Niederberger
 % 
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -35,7 +35,7 @@
   package = bohr ,
   authors = Clemens Niederberger ,
   email   = contact@mychemistry.eu ,
-  url     = https://bitbucket.org/cgnieder/bohr/ ,
+  url     = http://www.mychemistry.eu/forums/forum/bohr/ ,
   add-cmds = {
     atomicnumber,
     bohr,
@@ -87,14 +87,28 @@
 \license
 
 The \BOHR\ package loads and needs the packages
-\needpackage[graphics]{pgf}~\cite{pkg:pgf} and
+\needpackage[graphics]{pgf}~\cite{pkg:pgf},
+\needpackage{pgfopts}~\cite{pkg:pgfopts},
+\needpackage{elements}~\cite{pkg:elements} and
 \pkg{cnltx-base}\footnote{\CTANurl{cnltx}}~\cite{bnd:cnltx}.
 
+\section{News}
+With version~1.0 all the parts not directly used for drawing the Bohr models
+such as defining element names (\cs*{setatomname}) or element symbols
+(\cs*{setatomsymbol}) or writing the electron configuration (\cs*{elconf})
+have been extracted into a new package called \pkg{elements}.  This package
+provides all the commands besides \cs{bohr} and \cs{setbohr} that you know
+from earlier versions of \BOHR.  As a consequence the option
+\option*{language} has been dropped.  Obviously said package is now needed by
+\BOHR.
+
 \section{Options}
-Every option described in the manual can also be used as package option.
-Options are indicated as \option*{option} and are all key/value like options.
-Some options can be set without value, too.  Then the
-\code{\default{underlined}} value is used.
+Every option described in the manual can also be used as package option
+although this is not really advertised.  The preferred version is to set
+options via the setup command \cs{setbohr}.  Future versions of \cs{bohr} may
+drop the possible package options completely.  Options are indicated as
+\option*{option} and are all key/value like options.  Some options can be set
+without value, too.  Then the \code{\default{underlined}} value is used.
 
 \section{Usage}
 \BOHR\ is used like any other \LaTeXe\ package:
@@ -166,14 +180,6 @@ There is not much more to it.  Another example using the optional argument:
   \keyval{shell-dist}{dimension}\Default{1em}
     The distance between the nucleus and the first shell and between subsequent
     shells.
-  \keyval{language}{language}\Default
-    \sinceversion{0.2d}Select the language used for the element names manually
-    rather than letting \BOHR\ select it automatically.  This option must be
-    used as package option or in the preamble in order to have an effect.
-    Currently provided languages are \code{English}, \code{French} and
-    \code{German}.  If this option is not used the document language at the
-    end of the preamble (as set by \pkg{babel} or \pkg{polyglossia}) is
-    used.
   \keychoice{distribution-method}{periodic,quantum}\Default{quantum}
     \sinceversion{0.3}Determines how the electrons are distributed on the
     shells.  \code{periodic} distributes the electrons 2-8-8-18-18-32-32, \ie,
@@ -206,94 +212,12 @@ There is not much more to it.  Another example using the optional argument:
   \bohr{6}{} \bohr{}{K}
 \end{example}
 
-\setbohr{atom-style = \ch}
-
-\section{Additional Commands}\label{sec:additional-commands}
-\BOHR\ provides some additional commands that return the element symbol or the
-element name to a given atomic number and vice versa.
-\begin{commands}
-  \command{elementsymbol}[\Marg{\choices{\meta{atomic number},\meta{element
-        name}}}]
-    Returns the element symbol for a given atomic number or element name.\\
-    \verbcode+\elementsymbol{80}+: \elementsymbol{80};\\
-    \verbcode+\elementsymbol{rhenium}+: \elementsymbol{rhenium}.\\
-    The symbols are printed according to \option{atom-style}.
-  \command{elementname}[\Marg{\choices{\meta{atomic number},\meta{element
-        symbol}}}]
-    Returns the element name for a given atomic number or element symbol.\\
-    \verbcode+\elementname{80}+: \elementname{80};\\
-    \verbcode+\elementname{Rh}+: \elementname{Rh}.
-  \command{atomicnumber}[\Marg{\choices{\meta{element name},\meta{element
-        symbol}}}]
-    Returns the atomic number for a given element name or element symbol.\\
-    \verbcode+\atomicnumber{Hg}+: \atomicnumber{Hg};\\
-    \verbcode+\atomicnumber{rhenium}+ \atomicnumber{rhenium}.
-  \command{Z}
-    If this command isn't defined at begin document it is available as an
-    alias of \cs{atomicnumber}.
-  \command{elconf}[\Marg{\choices{\meta{atomic number},\meta{element
-        symbol},\meta{element name}}}]
-    \sinceversion{0.4}Prints the electron configuration of the given
-    element.\\
-    \verbcode+\elconf{Cu}+: \elconf{Cu};\\
-    \verbcode+\elconf{copper}+: \elconf{copper};\\
-    \verbcode+\elconf{29}+: \elconf{29}.\\
-    Currently there is no way to get the shortened version
-    (\eg\ $[\elementsymbol{18}]3d^{10}4s^1$ for \elementname{29}).
-  \command{writeelconf}[\marg{electron distribution}]
-    \sinceversion{0.4}Writes the electron distribution \meta{electron
-      distribution}.  The input is the same as described below for
-    \cs{setelectrondistribution}.\\
-    \verbcode=\writeelconf{2,2+6,2+6+7}=: \writeelconf{2,2+6,2+6+7}.
-  \command{setatomsymbol}[\marg{atomic number}\marg{atom symbol}]
-    \sinceversion{0.4}This sets the symbol associated with the atom number
-    \meta{atomic number}.
-  \command{setatomname}[\marg{atomic number}\marg{element name}]
-    \sinceversion{0.4}This sets the element name associated with the atom
-    number \meta{atomic number}.
-  \command{setelectrondistribution}[\marg{atomic number}\marg{electron
-    distribution}]
-    \sinceversion{0.4}This set the electron distribution associated with the
-    atom number \meta{atomic number}.  \meta{electron distribution} is a
-    comma-separated list of the number of electrons placed on each shell from
-    inner to outer shell.  For example
-    \verbcode+\setelectrondistribution{3}{2,0,1}+ would be an excited
-    Lithium.  The distribution thus declared is used for drawing with
-    \keyis{distribution-method}{quantum} and is also used by \cs{elconf}.  The
-    number of electrons with the same principal quantum number but a different
-    angular quantum number are separated with a \code{+} ordered by the
-    angular quantum number, \ie, first $s$, then $p$, then $d$, and then $f$.
-    \elementname{29}'s distribution would be declared like this:
-    \verbcode=\setelectrondistribution{29}{2,2+6,2+6+10,1}=.\par
-    A declaration with \verbcode=\setelectrondistribution{29}{2,8,18,1}= would
-    work but then \cs{elconf}\Marg{29} would give the wrong results.
-\end{commands}
-
 \begin{example}
-  The elements \elementname{F}, \elementname{Cl}, \elementname{Br},
-  \elementname{I} and \elementname{At} are called \emph{halogens}.
+  \setbohr{distribution-method=quantum,insert-missing}
+  \elconf{Fe} \\ % provided by `elements'
+  \bohr{}{Fe}
+  \setbohr{distribution-method=periodic}
+  \bohr{}{Fe}
 \end{example}
-
-\section{Internal Commands}\label{sec:internal-commands}
-The element properties used by \BOHR\ are defined through the following commands:
-\begin{commands}
-  \command{DeclareAtomSymbol}[\marg{atomic number}\marg{atom symbol}]
-    The package file contains 112~lines like the following:
-    \verbcode+\DeclareAtomSymbol{29}{Cu}+.  They associate atomic number with
-    the corresponding atom symbol.  This is the internal equivalent to
-    \cs{setatomsymbol}.
-  \command{DeclareAtomName}[\marg{atomic number}\marg{element name}]
-    \BOHR\ comes with a few language files named
-    \code{bohr\_elements\_\meta{language}.def}.  They contain of 112~entries
-    like \verbcode+\DeclareAtomName{29}{Copper}+ which associate atomic number
-    and element name.  This is the internal equivalent to \cs{setatomname}.
-  \command{DeclareElectronDistribution}[\marg{atomic number}\marg{electron
-    distribution}]
-    The \meta{electron distribution} is a comma separated list of integers
-    which determines how the electrons are distributed on the shells when
-    \keyis{distribution-method}{quantum}.  The package file contains
-    112~entries like \verbcode=\DeclareElectronDistribution{29}{2,2+6,2+6+10,1}=.
-    This is the internal equivalent to \cs{setelectrondistribution}.
-\end{commands}
 
 \end{document}
